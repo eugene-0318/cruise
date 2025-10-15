@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>요단강 크루즈</title>
+	<style>
+						@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2);
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.woff2);
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2);
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.woff2);
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2);
+    font-weight: 700;
+    font-display: swap;
+}
+
+.wrap, #mainScreen {
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.8s ease;
+}
+.wrap.fade-out { opacity: 0; pointer-events: none; }
+
+#mainScreen {
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2000;
+}
+
+#mainScreen.fade-in {
+    opacity: 1;
+    pointer-events: all;
+}
+
+#loader {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: black;
+    z-index: 99999; /* 9999 → 99999로 높임 */
+    opacity:1;
+    transition: opacity 0.5s ease;
+}
+		#loader.hide {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+#overlay {
+  position: absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0); 
+  pointer-events: none;
+  transition: background 0.3s ease;
+  z-index: 3000;
+}
+
+#resultText {
+  position: absolute;
+  top:50%; left:50%;
+  transform: translate(-50%, -50%);
+  color:white;
+  font-size:24px;
+  text-align:center;
+  display:none;
+  z-index:3001;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+		body{background: url(insidecruise.png); background-size: cover;}
+		div{position: relative; font-family: MaruBuri; font-weight: 600;}
+		section{background: rgba(0,0,0,0.8); position: fixed; align-items: center; justify-content: center; margin: auto; width: 1440px; height: 800px; top: 50%; left: 50%; transform: translate(-50%, -50%);}
+
+		.wrap{width: 900px; height: 1000px; margin: auto; font-family: MaruBuri; font-weight: 600; color: white;background-color: black; background: rgba(0,0,0,0.7); background-attachment: fixed; text-align: center; padding: 30px 100px;position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; justify-content: center;align-items: center; display: flex; flex-direction: column; z-index: 999;
+		transition: opacity 0.6s ease; line-height: 1.7;}
+	.text {
+			font-size: 18px;
+			line-height: 1.7;
+			opacity: 1;
+			transition: opacity 0.6s ease;
+			color: white;
+			pointer-events: none;
+		}
+		h1{font-size: 35px; line-height: 1.7; font-weight: 700; padding-bottom: 50px; font-family: MaruBuri; align-items: center;
+			justify-content: center;
+			color: white;}
+            p{line-height: 1.7;}
+
+		.fade-out {
+			opacity: 0;
+		}
+
+		.fade-in {
+			opacity: 1;
+		}
+
+		.sec-screen{background: rgba(0,0,0,0.7); background-attachment: fixed;}
+
+		.food{width: 470px; position: absolute; top: 94px; left: 100px;}
+		.side{width: 240px; position: absolute; top: 377px; left: 580px;}
+
+				.hint {
+			font-size: 14px;
+			color: rgba(255,255,255,0.8);
+			font-family: MaruBuri;
+			padding-left: 50px;
+			cursor: pointer;}
+
+	.startBtn {
+	font-family: MaruBuri;
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .startBtn:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+
+.input{font-size: 15px; font-weight: 600; font-family: MaruBuri; color: gray; width: 500px; height: 50px; border-radius: 10px;}
+
+.paper-area { position: relative; display: inline-block; }
+.paper-area img { display: block; max-width: 1000px; height: auto; user-select: none; }
+.word {
+  position: absolute;
+  color: black;
+  font-family: MaruBuri;
+  font-size: 18px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.98);
+  animation: fadeIn 0.45s forwards;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+}
+@keyframes fadeIn {
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.word.fade-out {
+  animation: fadeOut 1s forwards;
+}
+@keyframes fadeOut {
+  to { opacity: 0; transform: translate(-50%, -60%) scale(0.95); }
+}
+
+	</style>
+</head>
+
+<body>
+	<div id="loader"></div>
+	<div class="wrap" id="introScreen">
+    <h1>2. 저승사자 상담 서비스</h1>
+    <p>살아계실 때 있었던 일 중에 혼자만 알기 아까운 일이 있으신가요?<br>온갖 기뻤던 일, 한스러운 일, 파란만장한 인생사까지.<br>저승사자에게 모두 털어놔 보세요.</p>
+    <div id="hint" class="hint">계속 ▸</div>
+</div>
+
+<section id="mainScreen">
+    <div style="display: flex;">
+    <div style="flex-direction: column;">
+	<h1 style="font-size: 25px; padding: 20px 50px;">2. 저승사자 상담 서비스</h1>
+	<p class="hint" style="pointer-events: none;">입력창에 당신의 이야기를 쓰고,<br>종이에 커서를 옮겨 저승사자에게 들려주세요.</p>
+    </div>
+    <div style="padding-left: 50px; padding-top: 70px;">
+    <input id="t" type="text" placeholder=" 당신의 이야기를 적어 주세요." class="input">
+    </div>
+    </div>
+
+    <div style="display: flex;">
+	    <div class="paper-area" id="paperArea" style="padding-left: 50px;">
+       <img id="paperImg" src="paper.png" alt="paper" style="width: 800px">
+   </div>
+   <div>
+	<img src="reaper.png" style="width: 500px;">
+</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const loader = document.getElementById("loader");
+    const introScreen = document.getElementById("introScreen");
+     // loader hide
+    setTimeout(() => {
+        loader.classList.add("hide");
+    }, 1000);
+
+     hint.addEventListener("click", () => {
+        introScreen.classList.add("fade-out");
+        setTimeout(() => {
+            introScreen.style.display = "none";
+            mainScreen.classList.add("fade-in");
+        }, 800);
+    });
+    });
+
+const tInput = document.getElementById("t");
+const paperArea = document.getElementById("paperArea");
+
+let words = [];
+let wordIndex = 0;
+let lastTime = 0;
+const delay = 150; 
+let wordCount = 0; 
+const revealCount = 25; 
+
+tInput.addEventListener("input", () => {
+  words = tInput.value.trim().split(/\s+/);
+  wordIndex = 0;
+  wordCount = 0;
+});
+
+
+paperArea.addEventListener("mousemove", (e) => {
+  const now = Date.now();
+  if (now - lastTime < delay) return;
+  lastTime = now;
+
+  if (words.length === 0) return;
+
+  const rect = paperArea.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const span = document.createElement("span");
+  span.className = "word";
+  span.textContent = words[wordIndex];
+  span.style.left = `${x}px`;
+  span.style.top = `${y}px`;
+  span.style.fontSize = `${16 + Math.random() * 20}px`;
+
+  paperArea.appendChild(span);
+
+  // 순환
+  wordIndex = (wordIndex + 1) % words.length;
+  wordCount++;
+
+ if (wordCount === revealCount) {
+    const revealDiv = document.createElement("div");
+    revealDiv.id = "ohwowDiv";
+    revealDiv.style.position = "absolute";
+    revealDiv.style.top = "45%";
+    revealDiv.style.left = "50%";
+    revealDiv.style.transform = "translate(-50%, -50%)";
+    revealDiv.style.zIndex = "100";
+    revealDiv.style.textAlign = "center";
+    revealDiv.style.opacity = "0";
+    revealDiv.style.transition = "opacity 1s ease";
+    revealDiv.style.padding = "20px";
+    revealDiv.style.background = "rgba(0,0,0,0.7)";
+    revealDiv.style.borderRadius = "10px";
+    revealDiv.style.backgroundSize = "contain";
+    revealDiv.style.backgroundRepeat = "no-repeat";
+    revealDiv.style.backgroundPosition = "center";
+    revealDiv.style.width = "400px";
+    revealDiv.style.height = "400px";
+    revealDiv.style.display = "flex";
+    revealDiv.style.flexDirection = "column";
+    revealDiv.style.justifyContent = "center";
+    revealDiv.style.alignItems = "center";
+
+    const img = document.createElement("img");
+    img.src = "ohwow.png";
+    img.style.maxWidth = "300px";
+    img.style.marginBottom = "15px";
+
+    const text = document.createElement("p");
+    text.textContent = "이런, 저승사자가 그렇게 친절하진 않네요.\n서비스직의 애환이 있을 테니 이해해 줍시다.";
+    text.style.whiteSpace = "pre-line";
+    text.style.fontSize = "18px";
+    text.style.fontWeight = "600";
+    text.style.color = "white";
+    text.style.textAlign = "center";
+    text.style.lineHeight = "1.7";
+
+    const button = document.createElement("button");
+    button.className = "startBtn";
+    button.textContent = "다음";
+    button.addEventListener("click", () => {
+      window.location.href = "index4.html"; // 이동할 페이지 주소로 변경
+    });
+
+    revealDiv.appendChild(img);
+    revealDiv.appendChild(text);
+    revealDiv.appendChild(button);
+    paperArea.appendChild(revealDiv);
+
+    // 서서히 나타나기
+    setTimeout(() => {
+      revealDiv.style.opacity = "1";
+    }, 50);
+  }
+});
+
+
+</script>
+</body>
+</html>

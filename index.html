@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>요단강 크루즈</title>
+	<style>
+		@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2);
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.woff2);
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2);
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.woff2);
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2);
+    font-weight: 700;
+    font-display: swap;
+}
+
+		#loader {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: black;
+			z-index: 9999;
+			opacity: 1;
+			transition: opacity 0.5s ease;
+		}
+		#loader.hide {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+
+		body{background: url(river.png); background-size: cover;}
+
+		.wrap{width: 800px; height: 200px; margin: auto; font-family: MaruBuri; font-weight: 600; color: white;background-color: black; background-attachment: fixed; text-align: center; padding: 30px 100px;position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; justify-content: center;align-items: center; display: flex; flex-direction: column; z-index: 999;}
+	.text {
+			font-size: 18px;
+			line-height: 1.7;
+			opacity: 1;
+			transition: opacity 0.6s ease;
+			color: white;
+			pointer-events: none;
+		}
+		.title{font-size: 35px; line-height: 1.7; font-weight: 700; padding-top: 50px;}
+
+		.fade-out {
+			opacity: 0;
+		}
+
+		.fade-in {
+			opacity: 1;
+		}
+
+		.next-screen {
+			position: relative;
+			 top: 50%;
+    		left: 50%;
+    		transform: translate(-50%, -50%);
+			display: none;
+			position: fixed;
+			width: 800px;
+			background: rgba(0,0,0,0.7);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: auto;
+			border-radius: 10px;
+			flex-direction: column;
+			color: white;
+			font-family: MaruBuri;
+			font-weight: 600;
+			font-size: 15px;
+			text-align: center;
+			opacity: 0;
+			line-height: 1.8;
+			transition: opacity 1s ease;
+			z-index: 1;
+			padding: 100px 100px;
+		}
+		.next-screen.show {
+			display: flex;
+			flex-direction: column;
+			opacity: 1;
+		}
+
+		.hint {
+			padding-top: 40px;
+			font-size: 14px;
+			color: rgba(255,255,255,0.7);
+			cursor: pointer;
+		}
+
+	.start-btn {
+	font-family: MaruBuri;
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+	.start-btn:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+	</style>
+</head>
+<body>
+	<div id="loader"></div>
+<section>
+<div class="wrap" id="wrap">
+			<div id="text" class="text" style="transition: opacity 0.6s ease;">어느날 갑자기 생을 마감한 당신. 눈앞에는 요단강이 보입니다.</div>
+			<div id="hint" class="hint">계속 ▸</div>
+		</div>
+
+		<div class="next-screen" id="nextScreen">
+			<img src="cruise.png" class="screen-bg">
+		<span class='title'>요단강 크루즈</span><br>환영합니다!<br>여기는 기간을 불문하고 임종 직후부터 장례와 매장이 완료될 때까지<br> 생자와 혼령의 경계에서 체류하는 분들을 위해 만들어진 요단강 크루즈입니다.<br>크루즈 내에서 제공되는 다양한 서비스와 함께 <br>저승길을 보다 윤택하게 즐겨 보아요.
+		 <button id="startBtn" class="start-btn">탑승</button>
+	</div>
+
+	  <script>
+	  	document.addEventListener("DOMContentLoaded", () => {
+
+	const loader = document.getElementById("loader");
+	setTimeout(() => {
+		loader.classList.add("hide");
+	}, 1000);
+
+  let data = "어느날 갑자기 생을 마감한 당신. 눈앞에는 요단강이 보입니다.ㅇ장례가 치러지고 묫자리가 정해지기까지는 앞으로 며칠.<br>그때까지 이승과 저승의 경계인 이곳에서 시간을 때워야 하는데…ㅇ막막하던 그때, 저 멀리 크루즈 하나가 보입니다!";
+
+  let lyrics = data.split("ㅇ").filter(ch => ch.trim() !== "");
+  let i = 0;
+
+  const textEl = document.getElementById("text");
+  const hintEl = document.getElementById("hint");
+  const wrap = document.getElementById("wrap");
+  const nextScreen = document.getElementById("nextScreen");
+  const startBtn = document.getElementById("startBtn"); // start 버튼
+
+  function showNext() {
+    i++;
+
+    if (i < lyrics.length) {
+      textEl.classList.remove("fade-in");
+      textEl.classList.add("fade-out");
+
+      setTimeout(() => {
+        textEl.innerHTML = lyrics[i];
+        textEl.classList.remove("fade-out");
+        textEl.classList.add("fade-in");
+      }, 600);
+
+    } else if (i === lyrics.length) {
+      wrap.classList.add("fade-out");
+      setTimeout(() => {
+        wrap.style.display = "none";
+        nextScreen.classList.add("show");
+      }, 800);
+    }
+  }
+
+  hintEl.addEventListener("click", showNext);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.code === "Space" || e.code === "ArrowRight") {
+      e.preventDefault();
+      showNext();
+    }
+  });
+
+  startBtn.addEventListener("click", () => {
+    window.location.href = "index2.html";
+  });
+});
+</script>
+
+
+</section>
+</body>
+</html>

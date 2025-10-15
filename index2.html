@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>요단강 크루즈</title>
+	<style>
+				@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2);
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.woff2);
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2);
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.woff2);
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2);
+    font-weight: 700;
+    font-display: swap;
+}
+
+.wrap, #mainScreen {
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.8s ease;
+}
+.wrap.fade-out { opacity: 0; pointer-events: none; }
+
+#mainScreen {
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2000;
+}
+
+#mainScreen.fade-in {
+    opacity: 1;
+    pointer-events: all;
+}
+
+#loader {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: black;
+    z-index: 99999; /* 9999 → 99999로 높임 */
+    opacity:1;
+    transition: opacity 0.5s ease;
+}
+		#loader.hide {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+#overlay {
+  position: absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0); /* 초기 투명 */
+  pointer-events: none;
+  transition: background 0.3s ease;
+  z-index: 3000;
+}
+
+#resultText {
+  position: absolute;
+  top:50%; left:50%;
+  transform: translate(-50%, -50%);
+  color:white;
+  font-size:24px;
+  text-align:center;
+  display:none;
+  z-index:3001;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+		body{background: url(insidecruise.png); background-size: cover;}
+		div{position: relative; font-family: MaruBuri; font-weight: 600;}
+		section{background: rgba(0,0,0,0.8); position: fixed; align-items: center; justify-content: center; margin: auto; width: 1440px; height: 800px; top: 50%; left: 50%; transform: translate(-50%, -50%);}
+
+		.wrap{width: 900px; height: 1000px; margin: auto; font-family: MaruBuri; font-weight: 600; color: white;background-color: black; background: rgba(0,0,0,0.7); background-attachment: fixed; text-align: center; padding: 30px 100px;position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; justify-content: center;align-items: center; display: flex; flex-direction: column; z-index: 999;
+		transition: opacity 0.6s ease; line-height: 1.7;}
+        p{line-height: 1.7;}
+	.text {
+			font-size: 18px;
+			line-height: 1.7;
+			opacity: 1;
+			transition: opacity 0.6s ease;
+			color: white;
+			pointer-events: none;
+		}
+		h1{font-size: 35px; line-height: 1.7; font-weight: 700; padding-bottom: 50px; font-family: MaruBuri; align-items: center;
+			justify-content: center;
+			color: white;}
+
+		.fade-out {
+			opacity: 0;
+		}
+
+		.fade-in {
+			opacity: 1;
+		}
+
+		.sec-screen{background: rgba(0,0,0,0.7); background-attachment: fixed;}
+
+		.food{width: 470px; position: absolute; top: 94px; left: 100px;}
+		.side{width: 240px; position: absolute; top: 377px; left: 580px;}
+
+				.hint {
+			font-size: 14px;
+			color: rgba(255,255,255,0.8);
+			font-family: MaruBuri;
+			padding-left: 50px;
+			cursor: pointer;}
+
+				.startBtn {
+	font-family: MaruBuri;
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+	.startBtn:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+	</style>
+</head>
+<body>
+	<div id="loader"></div>
+	<div class="wrap" id="introScreen">
+    <h1>1. 식사 제공 서비스</h1>
+    <p>이미 죽은 몸인데 식사가 무슨 소용이냐고요?<br>
+    뭐 그렇긴 한데...살아있을 때의 습관을 못 버리고 식사를 찾으시는 분들이 계셔서요.<br>
+    기분이라도 내 보자는 거죠.</p>
+    <div id="hint" class="hint">계속 ▸</div>
+</div>
+    <div id="overlay"></div>
+     <div id="resultText">
+    <div>입맛에 맞으시나요?<br>지금 입에 들어있는 게 정확히 뭐 같으신가요?
+    </div>
+    	<div>
+    <button class="startBtn" id="startBtn">다음</button>
+  </div>
+</div>
+<section id="mainScreen">
+	<h1 style="font-size: 25px; padding: 20px 50px;">1. 식사 제공 서비스</h1>
+	<p class="hint" style="pointer-events: none;">음식을 눌러 메뉴를 고른 뒤, 입을 눌러 씹어 보세요.</p>
+<div style="display: flex; align-items: center; gap: 440px;">
+
+    <div id="foodGroup" style="position: relative; width: 600px; height: 500px; flex-shrink: 0;">
+        <img src="dish.png" style="position: absolute; top: 30px; left: 0;">
+        <img src="1.png" id="food" class="food" style="position: absolute; top: 94px; left: 100px;">
+        <img src="7.png" id="side" class="side" style="position: absolute; top: 377px; left: 580px;">
+    </div>
+
+
+    <div class="mouth-group" style="flex-shrink: 0;">
+        <img src="rice.png" id="mouth" style="width: 300px; cursor: pointer;">
+    </div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const loader = document.getElementById("loader");
+    const introScreen = document.getElementById("introScreen");
+    const mainScreen = document.getElementById("mainScreen");
+    const hint = document.getElementById("hint");
+
+    const food = document.getElementById("food");
+    const side = document.getElementById("side");
+    const mouth = document.getElementById("mouth");
+    const foodGroup = document.getElementById("foodGroup");
+    const overlay = document.getElementById("overlay");
+    const resultText = document.getElementById("resultText");
+    const startBtn = document.getElementById("startBtn");
+
+    const images = ['ricebite.png', 'beads.png', 'coin.png'];
+    let clickCount = 0;
+    let foodNumber = 1;
+    let sideNumber = 7;
+
+    // loader hide
+    setTimeout(() => {
+        loader.classList.add("hide");
+    }, 1000);
+
+    // intro → main 화면 전환
+    hint.addEventListener("click", () => {
+        introScreen.classList.add("fade-out");
+        setTimeout(() => {
+            introScreen.style.display = "none";
+            mainScreen.classList.add("fade-in");
+        }, 800);
+    });
+
+    // food 클릭
+    food.addEventListener("click", () => {
+        foodNumber++;
+        if (foodNumber === 6) foodNumber = 1;
+        food.src = foodNumber + ".png";
+    });
+
+    // side 클릭
+    side.addEventListener("click", () => {
+        sideNumber++;
+        if (sideNumber === 11) sideNumber = 7;
+        side.src = sideNumber + ".png";
+    });
+
+    // mouth 클릭
+    mouth.addEventListener("click", () => {
+        clickCount++;
+
+        // 랜덤 이미지 5개 생성
+        for (let i = 0; i < 5; i++) {
+            const clone = document.createElement('img');
+            clone.src = images[Math.floor(Math.random() * images.length)];
+            clone.style.width = '200px';
+            clone.style.position = 'absolute';
+            clone.style.left = Math.random() * 800 + 'px';
+            clone.style.top = Math.random() * 450 + 'px';
+            clone.style.zIndex = 1500;
+            foodGroup.appendChild(clone);
+        }
+
+        // overlay 6번째 클릭부터 점점 어둡게
+        if (clickCount >= 4) {
+            let opacity = 0.1 * (clickCount - 4);
+            if (opacity > 0.7) opacity = 0.7;
+            overlay.style.background = `rgba(0,0,0,${opacity})`;
+        }
+
+           if (clickCount === 10) {
+      resultText.style.display = 'flex';
+      resultText.style.zIndex = 4000;;
+
+            startBtn.addEventListener("click", () => {
+                window.location.href = "index3.html";
+            });
+        }
+    });
+});
+</script>
+
+</section>
+</body>
+</html>
