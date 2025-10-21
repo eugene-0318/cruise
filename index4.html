@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>요단강 크루즈</title>
+	<style>
+				@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2);
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.woff2);
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2);
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.woff2);
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2);
+    font-weight: 700;
+    font-display: swap;
+}
+
+.wrap, #mainScreen {
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.8s ease;
+}
+.wrap.fade-out { opacity: 0; pointer-events: none; }
+
+#mainScreen {
+    width: 100%;
+    height: 100%;
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2000;
+}
+
+#mainScreen.fade-in {
+    opacity: 1;
+    pointer-events: all;
+}
+
+#loader {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: black;
+    z-index: 99999; /* 9999 → 99999로 높임 */
+    opacity:1;
+    transition: opacity 0.5s ease;
+}
+		#loader.hide {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		.hint {
+			padding-top: 40px;
+			font-size: 14px;
+			color: rgba(255,255,255,0.7);
+			cursor: pointer;
+		}
+
+	.start-btn {
+	font-family: MaruBuri;
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+	.start-btn:hover {
+    background-color: #000;
+    color: #fff;
+}
+		body{background: url(insidecruise.png); background-size: cover;}
+		div{position: relative; font-family: MaruBuri; font-weight: 600;}
+		section{background: rgba(0,0,0,0.8); position: fixed; align-items: center; justify-content: center; margin: auto; width: 1440px; height: 800px; top: 50%; left: 50%; transform: translate(-50%, -50%);}
+
+		.wrap{width: 900px; height: 1000px; margin: auto; font-family: MaruBuri; font-weight: 600; color: white;background-color: black; background: rgba(0,0,0,0.7); background-attachment: fixed; text-align: center; padding: 30px 100px;position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; justify-content: center;align-items: center; display: flex; flex-direction: column; z-index: 999;
+		transition: opacity 0.6s ease; line-height: 1.7;}
+        p{line-height: 1.7;}
+	.text {
+			font-size: 18px;
+			line-height: 1.7;
+			opacity: 1;
+			transition: opacity 0.6s ease;
+			color: white;
+			pointer-events: none;
+		}
+		h1{font-size: 35px; line-height: 1.7; font-weight: 700; padding-bottom: 50px; font-family: MaruBuri; align-items: center;
+			justify-content: center;
+			color: white;}
+
+		.fade-out {
+			opacity: 0;
+		}
+
+		.fade-in {
+			opacity: 1;
+		}
+
+		.sec-screen{background: rgba(0,0,0,0.7); background-attachment: fixed;}
+
+		.food{width: 470px; position: absolute; top: 94px; left: 100px;}
+		.side{width: 240px; position: absolute; top: 377px; left: 580px;}
+
+				.hint {
+			font-size: 14px;
+			color: rgba(255,255,255,0.8);
+			font-family: MaruBuri;
+			padding-left: 50px;
+			cursor: pointer;}
+
+				.startBtn {
+	font-family: MaruBuri;
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+	.startBtn:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+#tvContainer {
+    position: relative;
+    width: 55%;
+    height: 20%;
+    overflow: hidden;
+    border-radius: 20px;
+    margin: 50px auto;
+}
+
+#tvScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+    z-index: 1;
+}
+
+#tvFrame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 2;
+    pointer-events: none; /* 클릭 차단 */
+}
+
+	</style>
+</head>
+<body>
+	<div id="loader"></div>
+	<div class="wrap" id="introScreen">
+    <h1>3. 실시간 이승 스트리밍 서비스</h1>
+    <p>죽은 내 몸은 지금 어떤 상태일까? 가족들은 잘 있을까?<br>아직 이승에 궁금한 것이 많은 여러분을 위해, 텔레비전으로 현재 이승의 모습을 보여 드립니다.<br>시신 현황부터 지인들의 현황까지, 이승에서 벌어지는 일에 대한 궁금증을 풀어 보세요.
+</p>
+    <div id="hint" class="hint">계속 ▸</div>
+</div>
+
+<section id="mainScreen">
+    <div style="display: flex;">
+    <div style="flex-direction: column;">
+	<h1 style="font-size: 25px; padding: 20px 50px;">3. 실시간 이승 스트리밍 서비스</h1>
+	<p class="hint" style="pointer-events: none; padding-top: 0px;">텔레비전 화면을 눌러 채널을 바꿔 보세요.</p>
+    </div>
+    </div>
+    <div style="display: flex;">
+    <div id="tvContainer" 
+     style="position: relative; 
+            display: inline-block; 
+            width: 55%; /* 프레임 크기에 맞게 */
+            height: 20%; /* 프레임 크기에 맞게 */
+            overflow: hidden; /* 마스크 효과 핵심! */
+            border-radius: 20px; /* 프레임 모양이 둥글다면 추가 */
+            clip-path: inset(0); /* 선택사항: 클리핑 안정화 */
+            margin-left: 50px;
+            margin-top: 30px;
+            margin-right: 40px;">
+
+
+    <img id="tvScreen"
+         src="https://upload.wikimedia.org/wikipedia/commons/8/89/White-noise.gif"
+         style="width: 80%; height: 80%; object-fit: cover; transition: opacity 0.3s ease; position: absolute; top: 30px; left: 30;">
+
+
+    <img id="tvFrame"
+         src="tv.png"
+         style="width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 2;">
+</div>
+<div style="flex-direction: column;">
+<div id="textContainer" style="margin-left: 30px; color: white; font-family: MaruBuri; width: 500px; text-align: center; line-height: 5.0; padding-top: 120px;">
+    </div>
+    <div id="afterTextDiv" style="display: none;text-align: center; flex-direction: column; color: white; font-weight: 700; font-size: 20px; padding-top: 50px;">
+    <p>이승에서 나의 죽음은 어떤 죽음이었나요?</p>
+    <button class="startBtn" id="startBtn">다음</button>
+</div>
+    </div>
+
+
+<script>
+const loader = document.getElementById("loader");
+const introScreen = document.getElementById("introScreen");
+const mainScreen = document.getElementById("mainScreen");
+const hint = document.getElementById("hint");
+const tvScreen = document.getElementById("tvScreen");
+const noiseGif = "https://upload.wikimedia.org/wikipedia/commons/8/89/White-noise.gif";
+const channelTexts = [
+    "통곡과 애도가 끊임없이 이어지는 슬픈 죽음.",
+    "잘 죽었다며 비웃음당하고 조롱당하는 죽음.",
+    "아직 아무에게도 발견되지 못한 고요한 죽음."
+];
+const textContainer = document.getElementById("textContainer");
+const afterTextDiv = document.getElementById("afterTextDiv");
+
+// 채널 이미지 및 사운드 목록
+const channels = [
+    { img: "sad.png", sound: "sad.mp3" },
+    { img: "laugh.png", sound: "laugh.mp3" },
+    { img: "alone.png", sound: "fly.mp3" }
+];
+
+let currentChannel = -1; 
+let textLimitReached = false;
+
+// 로딩 화면 제거
+setTimeout(() => {
+    loader.classList.add("hide");
+}, 1000);
+
+// 인트로 → 메인 화면 전환
+hint.addEventListener("click", () => {
+    introScreen.classList.add("fade-out");
+    setTimeout(() => {
+        introScreen.style.display = "none";
+        mainScreen.classList.add("fade-in");
+    }, 800);
+});
+
+// TV 클릭 시 채널 변경
+tvScreen.addEventListener("click", () => {
+
+    // 화면 깜박임 효과 (노이즈 표시)
+    tvScreen.style.opacity = "0";
+    setTimeout(() => {
+        tvScreen.src = noiseGif;
+        tvScreen.style.opacity = "1";
+    }, 150);
+
+
+    // 잠시 후 채널 변경
+    setTimeout(() => {
+        currentChannel = (currentChannel + 1) % channels.length;
+        const next = channels[currentChannel];
+
+        // 다음 이미지로 전환
+        tvScreen.style.opacity = "0";
+        setTimeout(() => {
+            tvScreen.src = next.img;
+            tvScreen.style.opacity = "1";
+
+            // 채널 사운드 재생
+
+
+
+            const chSound = new Audio(next.sound);
+            chSound.volume = 0.8;
+            chSound.play();
+
+  if (!textLimitReached && currentChannel < channelTexts.length) {
+    const p = document.createElement("p");
+    p.textContent = channelTexts[currentChannel];
+    textContainer.appendChild(p);
+    textContainer.scrollTop = textContainer.scrollHeight;
+
+    // 3번째 줄이 추가되면 afterTextDiv 표시
+    if (textContainer.childElementCount === 3) {
+        textLimitReached = true; // 더 이상 텍스트 추가 금지
+        setTimeout(() => {
+            afterTextDiv.style.display = "block";
+        }, 1000); // 1초 딜레이
+                }
+            }
+
+        }, 200);
+    }, 600);
+     startBtn.addEventListener("click", () => {
+                window.location.href = "index5.html";
+            });
+});
+</script>
+</body>
+</html>

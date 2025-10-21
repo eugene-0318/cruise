@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>요단강 크루즈</title>
+	<style>
+		@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2);
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Light.woff2);
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-ExtraLight.woff2);
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.woff2);
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2);
+    font-weight: 700;
+    font-display: swap;
+}
+
+		#loader {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: black;
+			z-index: 9999;
+			opacity: 1;
+			transition: opacity 0.5s ease;
+		}
+		#loader.hide {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+		body{background: url(river.png); background-size: cover;}
+
+		.wrap{width: 800px; height: 200px; margin: auto; font-family: MaruBuri; font-weight: 600; color: white;background-color: black; background-attachment: fixed; text-align: center; padding: 30px 100px;position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; justify-content: center;align-items: center; display: flex; flex-direction: column; z-index: 999;}
+	.text {
+			font-size: 18px;
+			line-height: 1.7;
+			opacity: 1;
+			transition: opacity 0.6s ease;
+			color: white;
+			pointer-events: none;
+		}
+		.title{font-size: 35px; line-height: 1.7; font-weight: 700; padding-top: 50px;}
+
+		.fade-out {
+			opacity: 0;
+		}
+
+		.fade-in {
+			opacity: 1;
+		}
+
+		.next-screen {
+			position: relative;
+			 top: 50%;
+    		left: 50%;
+    		transform: translate(-50%, -50%);
+			display: none;
+			position: fixed;
+			width: 1000px;
+			background: rgba(0,0,0,0.7);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: auto;
+			border-radius: 10px;
+			flex-direction: column;
+			color: white;
+			font-family: MaruBuri;
+			font-weight: 600;
+			font-size: 18px;
+			text-align: center;
+			opacity: 0;
+			line-height: 1.8;
+			transition: opacity 1s ease;
+			z-index: 1;
+			padding: 100px 100px;
+		}
+		.next-screen.show {
+			display: flex;
+			flex-direction: column;
+			opacity: 1;
+		}
+		.next-screen img{padding-bottom: 50px; width: 420px;}
+
+		.hint {
+			padding-top: 40px;
+			font-size: 14px;
+			color: rgba(255,255,255,0.7);
+			cursor: pointer;
+		}
+
+
+
+	.start-btn {
+	font-family: MaruBuri;
+    margin-top: 30px;
+    padding: 12px 30px;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+	.start-btn:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+#playArea{position:relative; width:1000px; height:600px; background:#111; overflow:hidden; margin-bottom:10px;}
+#feet{position:absolute; top:50px; left:50px; width:200px; z-index:10; cursor:pointer;}
+#newText{ white-space: pre-line;}
+
+    .epilogue .child {
+      opacity: 0;
+      transition: opacity 1s ease;
+      margin: 10px 0;
+    }
+
+    .epilogue {
+      display: none;           
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      background: url(https://www.animationsoftware7.com/img/agifs/smoke02.gif) center/cover no-repeat;
+      background-size: cover;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      text-align: center;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;             
+      transition: opacity 1s ease;
+      font-family: MaruBuri;
+    }
+
+    .epilogue.show {
+      opacity: 1;
+    }
+
+</style>
+</head>
+<body>
+	<div id="loader"></div>
+<section>
+<div class="wrap" id="wrap">
+			<div id="text" class="text" style="transition: opacity 0.6s ease; z-index: 1000;">아, 어느새 강의 저편이 보입니다!<br>고객님의 장례 절차가 모두 끝났나 봅니다.</div>
+			<div id="hintWrap" class="hint">계속 ▸</div>
+		</div>
+		<div class="next-screen" id="nextScreen" style="z-index: 500;">
+			<img src="grave.png" class="screen-bg">
+	크루즈의 종착역은 바로 고객님의 유해가 묻힌 곳. 고객님의 묫자리입니다.<br>승객 여러분이 가진 모든 미련들이 요단강 크루즈를 이곳으로 향하게 합니다.
+	<div id="hintNextScreen" class="hint">계속 ▸</div>
+	</div>
+
+	<div class="next-screen" id="imageControlScreen">
+    <div id="playArea">
+        <img id="feet" src="feet.png" style="padding: 0;">
+    </div>
+      <p style="font-size:14px; text-align:center; color: rgba(255,255,255,0.7);">화살표 키로 발걸음을 움직여 하선하세요.<br>하염없이 걸은 뒤에는 맺음말이 나옵니다.</p>
+    <div>
+    	여러분의 모든 미련이 여러분의 짐가방이 되어 함께 하선합니다.
+    </div>
+</div>
+    <div id="epilogue" class="epilogue">
+    	<div class="child" style="opacity:0;">
+    	<p >이번 생에도 저희 요단강 크루즈를 이용해 주신 고객님들께 감사의 말씀을 드리며,</p>
+    </div>
+    	<div class="child" style="opacity:0;">
+    		<img src="incense.png" style= "height: 200px;filter: drop-shadow(0px 0px 10px white);">
+    		<p>삼가 고인의 명복을 빕니다.</p>
+    	</div>
+    	<div class="child" style="opacity:0;">
+    		<p style="font-size: 15px; color: rgba(255,255,255,0.8); line-height: 1.7;">요단강 크루즈<br>End.</p>
+    		<button id="startBtn" class="start-btn">처음으로</button>
+    	</div>
+    </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const loader = document.getElementById("loader");
+    setTimeout(() => loader.classList.add("hide"), 1000);
+
+    const wrap = document.getElementById("wrap");
+    const hintWrap = document.getElementById("hintWrap");
+    const nextScreen = document.getElementById("nextScreen");
+    const hintNextScreen = document.getElementById("hintNextScreen");
+    const imageControlScreen = document.getElementById("imageControlScreen");
+    const feet = document.getElementById("feet");
+    const playArea = document.getElementById("playArea");
+ const epilogue = document.getElementById('epilogue');
+    const startBtn = document.getElementById("startBtn");
+
+    // 화면 전환
+    hintWrap.addEventListener("click", () => {
+        wrap.style.display = "none";
+        nextScreen.classList.add("show");
+    });
+    hintNextScreen.addEventListener("click", () => {
+        nextScreen.classList.remove("show");
+        imageControlScreen.classList.add("show");
+    });
+
+    // 이동 관련 변수
+    const step = 100;
+    let feetPos = { top: 50, left: 50 };
+
+    const objects = [
+        { img: "dish.png", text: "버리지 못한 습관<br>만큼의 미련." },
+        { img: "reaper.png", text: "기나긴 사연<br>만큼의 미련." },
+        { img: "tv.png", text: "이승에 남겨진 것들<br>만큼의 미련." }
+    ];
+    let objIndex = 0;
+
+    let moveCount = 0;
+    const moveThreshold = 20;
+    let epilogueShown = false; // 에필로그 한 번만 나타나도록
+
+    document.addEventListener("keydown", (e) => {
+        if (!imageControlScreen.classList.contains("show")) return;
+
+        let moved = false;
+
+        // 매 키 입력마다 최신 크기 계산
+        const areaWidth = playArea.clientWidth;
+        const areaHeight = playArea.clientHeight;
+        const feetWidth = feet.offsetWidth;
+        const feetHeight = feet.offsetHeight;
+
+        // ↓ 이동 제어 (삐져나가지 않도록 조건 강화)
+        if (e.code === "ArrowDown" && feetPos.top + step <= areaHeight - feetHeight) {
+            feetPos.top += step;
+            moved = true;
+        }
+        if (e.code === "ArrowUp" && feetPos.top - step >= 0) {
+            feetPos.top -= step;
+            moved = true;
+        }
+        if (e.code === "ArrowRight" && feetPos.left + step <= areaWidth - feetWidth) {
+            feetPos.left += step;
+            moved = true;
+        }
+        if (e.code === "ArrowLeft" && feetPos.left - step >= 0) {
+            feetPos.left -= step;
+            moved = true;
+        }
+
+        // 실제 이동 처리
+        if (moved) {
+            feet.style.top = feetPos.top + "px";
+            feet.style.left = feetPos.left + "px";
+            moveCount++;
+
+            // 오브젝트 및 텍스트 생성
+            const obj = objects[objIndex];
+            const newImg = document.createElement("img");
+            newImg.src = obj.img;
+            newImg.style.position = "absolute";
+            newImg.style.width = "100px";
+            newImg.style.top = feetPos.top + "px";
+            newImg.style.left = feetPos.left + "px";
+            playArea.appendChild(newImg);
+
+            const newText = document.createElement("div");
+            newText.innerHTML = obj.text;
+            newText.style.position = "absolute";
+            newText.style.top = (feetPos.top + 45) + "px";
+            newText.style.left = feetPos.left + "px";
+            newText.style.color = "white";
+            newText.style.fontFamily = "MaruBuri";
+            newText.style.fontWeight = "600";
+            newText.style.fontSize = "14px";
+            playArea.appendChild(newText);
+
+            objIndex = (objIndex + 1) % objects.length;
+
+          if (moveCount >= moveThreshold && !epilogueShown) {
+            epilogueShown = true;
+
+
+            epilogue.style.display = "flex";
+
+            requestAnimationFrame(() => {
+              epilogue.classList.add('show');
+
+              const children = epilogue.querySelectorAll(".child");
+              children.forEach((child, index) => {
+                setTimeout(() => {
+                  child.style.opacity = 1;
+                }, 500 + index * 2000);
+              });
+            });
+          }
+        }
+      });
+
+    startBtn.addEventListener("click", () => {
+        window.location.href = "index.html";
+    });
+});
+
+
+</script>
+
+	</section>
+</body>
